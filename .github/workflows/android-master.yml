@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
+    - uses: actions/checkout@v2
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
 
-      - uses: r0adkll/sign-android-release@v1
+    - uses: r0adkll/sign-android-release@v1
       name: Sign app APK
       # ID used to access action output
       id: sign_app
@@ -29,17 +29,10 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
       env:
-        # override default build-tools version (29.0.3) -- optional
         BUILD_TOOLS_VERSION: "30.0.2"
 
-        # Example use of `signedReleaseFile` output -- not needed
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
-
-#      # buuild
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#      - name: Build with Gradle
-#        run: ./gradlew assembleRelease
+          # Example use of `signedReleaseFile` output -- not needed
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Signed app bundle
+        path: ${{steps.sign_app.outputs.signedReleaseFile}}
